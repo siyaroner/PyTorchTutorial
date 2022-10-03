@@ -62,11 +62,11 @@ train_loader=DataLoader(dataset=dataset,
                         shuffle=True)
 #convert ot an iterator and look at one random smaple
 dataiter=iter(train_loader)
-data=dataiter.next()
-features,labels=data
-print(features,labels)
+# data=dataiter.next()
+# features,labels=data
+# print(features,labels)
 
-"""""                       
+                     
 #Dummy training loop
 num_epochs=2
 total_samples=len(dataset)
@@ -78,7 +78,7 @@ for epoch in range(num_epochs):
         if (i+1)%5==0:
             print(f"Epoch= {epoch+1}/{num_epochs}, Step {i+1}/{n_iterations} | inputs {inputs.shape} | labels {labels.shape}")
 
-
+"""""   
 #Some famous datasets available in torchvision.datasets
 # e.g. MNIST, Fashion-MNIST, CIFAR10, COCO
 train_dataset=torchvision.datasets.MNIST(root="./data",
