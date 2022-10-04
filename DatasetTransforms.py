@@ -1,34 +1,34 @@
-# """"
-# Transforms can be applied to PIL images, tnesors,ndarrays, or custom dataset
-# during creation of the dataset
+# # """"
+# # Transforms can be applied to PIL images, tnesors,ndarrays, or custom dataset
+# # during creation of the dataset
 
-# list of built-in transforms:
-# https://pytorch.org/docs/stable/torchvision/transforms.html
+# # list of built-in transforms:
+# # https://pytorch.org/docs/stable/torchvision/transforms.html
 
-# On Images
-# ---------
-# CenterCrop, Grayscale, Pad, RandomAffine
-# RandomCrop, RandomHorizontalFlip, RandomRotation
-# Resize, Scale
-# On Tensors
-# ----------
-# LinearTransformation, Normalize, RandomErasing
-# Conversion
-# ----------
-# ToPILImage: from tensor or ndrarray
-# ToTensor : from numpy.ndarray or PILImage
-# Generic
-# -------
-# Use Lambda 
-# Custom
-# ------
-# Write own class
-# Compose multiple Transforms
-# ---------------------------
-# composed = transforms.Compose([Rescale(256),
-#                                RandomCrop(224)])
+# # On Images
+# # ---------
+# # CenterCrop, Grayscale, Pad, RandomAffine
+# # RandomCrop, RandomHorizontalFlip, RandomRotation
+# # Resize, Scale
+# # On Tensors
+# # ----------
+# # LinearTransformation, Normalize, RandomErasing
+# # Conversion
+# # ----------
+# # ToPILImage: from tensor or ndrarray
+# # ToTensor : from numpy.ndarray or PILImage
+# # Generic
+# # -------
+# # Use Lambda 
+# # Custom
+# # ------
+# # Write own class
+# # Compose multiple Transforms
+# # ---------------------------
+# # composed = transforms.Compose([Rescale(256),
+# #                                RandomCrop(224)])
                                
-# """
+# # """
 
 import torch
 import torchvision
@@ -63,11 +63,6 @@ class WineDataset(Dataset):
 #Cutom Transforms
 #implement __call__(self,sample) 
 
-# class ToTensor:
-#     #convert ndarrays to Tensors
-#     def __call__(self,sample):
-#         inputs,targets=sample
-#         return torch.from_numpy(inputs), torch.from_numpy(targets)
 
 class ToTensor:
     # Convert ndarrays to Tensors
@@ -95,7 +90,7 @@ print(type(features),type(labels))
 print(features,labels)
 
 print("\nWith Tensor Transform")
-dataset=WineDataset(transform=ToTensor)
+dataset=WineDataset(transform=ToTensor())
 first_data=dataset[0]
 features,labels=first_data
 print(type(features),type(labels))
@@ -108,8 +103,4 @@ first_data=dataset[0]
 features,labels=first_data
 print(type(features),type(labels))
 print(features,labels)
-        
-        
-        
-
-
+  
