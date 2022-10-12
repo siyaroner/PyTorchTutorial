@@ -48,4 +48,5 @@ class Net(nn.Module):
         return x
     
 net=Net()
-criterion=nn.CrossEntropyLoss
+criterion=nn.CrossEntropyLoss()
+optimizer=optim.Adam(net.parameters(),lr= 0.001,)
