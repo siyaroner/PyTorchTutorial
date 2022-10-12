@@ -1,5 +1,6 @@
 import torch
 import torchvision
+import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms
@@ -45,3 +46,6 @@ class Net(nn.Module):
         x=self.fc1(x)
         x=F.softmax(x)
         return x
+    
+net=Net()
+criterion=nn.CrossEntropyLoss
