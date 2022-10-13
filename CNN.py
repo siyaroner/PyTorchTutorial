@@ -17,16 +17,16 @@ testset=torchvision.datasets.CIFAR10(root="./data/CIFAR10", train=False,download
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-def imshow(img):
-    img=img/2+0.5
-    npimg=img.numpy()
-    plt.imshow(np.transpose(npimg,(1,2,0)))
-    plt.show()
-if __name__ == '__main__':
-    dataiter=iter(trainloader)
-    images,labels=dataiter.next()
-    imshow(torchvision.utils.make_grid(images))
-    print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
+# def imshow(img):
+#     img=img/2+0.5
+#     npimg=img.numpy()
+#     plt.imshow(np.transpose(npimg,(1,2,0)))
+#     plt.show()
+# if __name__ == '__main__':
+#     dataiter=iter(trainloader)
+#     images,labels=dataiter.next()
+#     imshow(torchvision.utils.make_grid(images))
+#     print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 
 class Net(nn.Module):
     def __init__(self):
@@ -36,17 +36,39 @@ class Net(nn.Module):
         self.conv3 = nn.Conv2d(9,12,3)
         self.pool=nn.MaxPool2d(2,2)
         self.conv4 = nn.Conv2d(12,12,3)
-        self.fc1= nn.Conv2d(12*3*3,10)
+        self.fc1= nn.Linear(1452,10)
     def forward(self,x):
         x=self.conv1(x)
         x=F.relu(x)
         x=F.relu(self.conv3(F.relu(self.conv2(x))))
         x=F.relu(self.conv4(self.pool(x)))
-        x=x.view(-1,12*3*3) #Flatten
+        x=x.view(-1,1452) #Flatten
         x=self.fc1(x)
         x=F.softmax(x)
         return x
     
 net=Net()
 criterion=nn.CrossEntropyLoss()
-optimizer=optim.Adam(net.parameters(),lr= 0.001,)
+optimizer=optim.Adam(net.parameters(),lr= 0.001)
+for epoch in range (10):
+    running_loss=0
+    if __name__ == '__main__':
+        for i,data in enumerate(trainloader,0):
+            inputs,labels=data
+            optimizer.zero_grad()
+            
+            pred=net(inputs)
+            loss=criterion(pred,labels)
+            loss.backward()
+            optimizer.step()
+            running_loss=running_loss+loss.item()
+            if i%500==0:
+                print(f"index= {i+1} epoch= {epoch+1} loss={running_loss/500}")
+        
+        
+        
+        
+        
+        
+        
+        
