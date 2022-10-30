@@ -10,7 +10,7 @@ import numpy as np
 device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 #hyper-parameters
-num_epochs=1
+num_epochs=4
 batch_size=4
 learning_rate=0.001
 
