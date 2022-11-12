@@ -43,7 +43,7 @@ def imshow(img):
 
 # # get some random training images
 dataiter = iter(train_loader)
-images, labels = dataiter.next()
+# images, labels = dataiter.next()
 
 # show images
 # imshow(torchvision.utils.make_grid(images))
@@ -82,6 +82,7 @@ for epoch in range(num_epochs):
         labels = labels.to(device)
          # Forward pass
         outputs = model(images)
+        print(outputs.shape,labels.shape)
         loss = criterion(outputs, labels)
         #backward and optimize
         optimizer.zero_grad()
@@ -90,34 +91,34 @@ for epoch in range(num_epochs):
         if (i+1) % 2000 == 0:
             print (f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{n_total_steps}], Loss: {loss.item():.4f}')
 
-print("Traning is finished")
-PATH = './cnn.pth'
-torch.save(model.state_dict(), PATH)
+# print("Traning is finished")
+# PATH = './cnn.pth'
+# torch.save(model.state_dict(), PATH)
 
-with torch.no_grad():
-    n_correct = 0
-    n_samples = 0
-    n_class_correct = [0 for i in range(10)]
-    n_class_samples = [0 for i in range(10)]
-    for images, labels in test_loader:
-        images = images.to(device)
-        labels = labels.to(device)
-        outputs = model(images)
-        # max returns (value ,index)
-        _, predicted = torch.max(outputs)
-        n_samples += labels.size(0)
-        n_correct += (predicted == labels).sum().item()
+# with torch.no_grad():
+#     n_correct = 0
+#     n_samples = 0
+#     n_class_correct = [0 for i in range(10)]
+#     n_class_samples = [0 for i in range(10)]
+#     for images, labels in test_loader:
+#         images = images.to(device)
+#         labels = labels.to(device)
+#         outputs = model(images)
+#         # max returns (value ,index)
+#         _, predicted = torch.max(outputs)
+#         n_samples += labels.size(0)
+#         n_correct += (predicted == labels).sum().item()
         
-        for i in range(batch_size):
-            label = labels[i]
-            pred = predicted[i]
-            if (label == pred):
-                n_class_correct[label] += 1
-            n_class_samples[label] += 1
+#         for i in range(batch_size):
+#             label = labels[i]
+#             pred = predicted[i]
+#             if (label == pred):
+#                 n_class_correct[label] += 1
+#             n_class_samples[label] += 1
 
-    acc = 100.0 * n_correct / n_samples
-    print(f'Accuracy of the network: {acc} %')
+#     acc = 100.0 * n_correct / n_samples
+#     print(f'Accuracy of the network: {acc} %')
 
-    for i in range(10):
-        acc = 100.0 * n_class_correct[i] / n_class_samples[i]
-        print(f'Accuracy of {classes[i]}: {acc} %')
+#     for i in range(10):
+#         acc = 100.0 * n_class_correct[i] / n_class_samples[i]
+#         print(f'Accuracy of {classes[i]}: {acc} %')
