@@ -48,37 +48,23 @@ classes = ['0 - zero', '1 - one', '2 - two', '3 - three', '4 - four',
 class MNIST_CNN(nn.Module):
     def __init__(self):
         super(MNIST_CNN, self).__init__()
-    #     self.conv1=Conv2d(1,6,5)
-    #     self.pool=MaxPool2d(2,2)
-    #     self.conv2=Conv2d(6,24,5)
-    #     self.fc1=Linear(24*5*5,120)
-    #     self.fc2=Linear(120,120)
-    #     self.fc3=Linear(120,10)
+        self.conv1=Conv2d(1,6,5)
+        self.pool=MaxPool2d(2,2)
+        self.conv2=Conv2d(6,24,5)
+        self.fc1=Linear(24*4*4,120)
+        self.fc2=Linear(120,84)
+        self.fc3=Linear(84,10)
     
-    # def forward(self,x):
-    #     x=self.pool(F.relu(self.conv1(x)))
-    #     x=self.pool(F.relu(self.conv2(x)))
-    #     x=x.view(-1,24*5*5)
-    #     x=F.relu(self.fc1(x))
-    #     x=F.relu(self.fc2(x))
-    #     x=self.fc3(x)
-    #     return x
-        self.conv1 = nn.Conv2d(1, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(self.x.shape[1], 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
-
-    def forward(self, x):
-        # -> n, 3, 32, 32
-        self.x = self.pool(F.relu(self.conv1(x)))  # -> n, 6, 14, 14
-        self.x = self.pool(F.relu(self.conv2(x)))  # -> n, 16, 5, 5
-        self.x = x.view(-1, x.shape[1])            # -> n, 400
-        x = F.relu(self.fc1(self.x))               # -> n, 120
-        x = F.relu(self.fc2(x))               # -> n, 84
-        x = self.fc3(x)                       # -> n, 10
+    def forward(self,x):
+        x=self.pool(F.relu(self.conv1(x)))
+        x=self.pool(F.relu(self.conv2(x)))
+        # print('x_shape:',x.shape)
+        x=x.view(4,24*4*4)
+        x=F.relu(self.fc1(x))
+        x=F.relu(self.fc2(x))
+        x=self.fc3(x)
         return x
+
 #create varibale for CNN class
 model=MNIST_CNN().to(device)
 #loss and optimizer functions
@@ -93,14 +79,14 @@ for epoch in range(num_epochs):
         
         #forward pass
         outputs=model(images)
-        print(outputs.shape,labels.shape)
-        # loss=1#criterion(outputs,labels)
+        # print(outputs.shape,labels.shape)
+        loss=criterion(outputs,labels)
         
-        # #backward and optimizer
-        # optimizer.zero_grad()
-        # # loss.backward()
-        # optimizer.step()
-        # if (i+1)%5000==0:
-        #   print(f"Epoch [{epoch+1}/{num_epochs}], Step[{i+1}/{n_total_steps}], Loss: {loss.item():.4f}")  
+        #backward and optimizer
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        if (i+1)%5000==0:
+          print(f"Epoch [{epoch+1}/{num_epochs}], Step[{i+1}/{n_total_steps}], Loss: {loss.item():.4f}")  
 
     
