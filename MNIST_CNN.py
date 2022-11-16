@@ -31,7 +31,7 @@ test_loader=torch.utils.data.DataLoader(test_dataset,batch_size=batch_size,shuff
 
 classes = ['0 - zero', '1 - one', '2 - two', '3 - three', '4 - four',
                '5 - five', '6 - six', '7 - seven', '8 - eight', '9 - nine']
-
+##quick show some samples of datasets
 # def imshow(img):
 #     # img=img/2+0.5 #unnormalize
 #     img_np=img.numpy()
@@ -45,6 +45,8 @@ classes = ['0 - zero', '1 - one', '2 - two', '3 - three', '4 - four',
 # images,labels = dataiter.next()
 # imshow(torchvision.utils.make_grid(images))
 ## creating CNN
+
+#Creating model
 class MNIST_CNN(nn.Module):
     def __init__(self):
         super(MNIST_CNN, self).__init__()
@@ -65,7 +67,7 @@ class MNIST_CNN(nn.Module):
         x=self.fc3(x)
         return x
 
-#create varibale for CNN class
+#calling class
 model=MNIST_CNN().to(device)
 #loss and optimizer functions
 criterion=nn.CrossEntropyLoss()
@@ -88,5 +90,55 @@ for epoch in range(num_epochs):
         optimizer.step()
         if (i+1)%5000==0:
           print(f"Epoch [{epoch+1}/{num_epochs}], Step[{i+1}/{n_total_steps}], Loss: {loss.item():.4f}")  
+
+#saving model         
+print("Training is done")         
+path="./mnist_cnn.pth"
+torch.save(model.state_dict(),path)
+
+# validation
+with torch.no_grad():
+    n_correct=0
+    n_samples=0
+    n_class_correct=[0 for i in range(10)]
+    n_class_samples=[0 for i in range(10)]
+    
+    for images,labels in test_loader:
+        images=images.to(device)
+        labels=labels.to(device)
+        outputs=model(images)
+        #max returns (max,index)
+        _,prediction=torch.max(outputs,1)
+        n_samples +=labels.size(0)
+        n_correct +=(prediction==labels).sum().item()
+        
+        for i in range(batch_size):
+            label=labels[i]
+            pred=prediction[i]
+            if (label==pred):
+                n_class_correct[label] +=1
+            n_class_samples[label] +=1
+    acc=100.0*n_correct/ n_samples
+    print(f"Accuracy of the network: {acc} %")
+    
+    for i in range(10):
+        acc=100.0*n_class_correct[i]/n_class_samples[i]
+        print(f"Accuracy of {classes[i]} : {acc} %")
+      
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
 
     
